@@ -1,10 +1,10 @@
 <?php
     include_once '../../db/Database.php';
+    define('TYPES', array("dvds", "furniture", "books"));
 
  class Products {
   protected $conn;
   private $table = "products";
-  public $TYPES =  ["DVDS", "Furniture", "Books"];
 
 
   
@@ -15,7 +15,7 @@
 
   public  function read(){
       $results=array();
-      foreach ($TYPES as &$type){
+      foreach (TYPES as &$type){
         $sql = "SELECT * FROM ".$this->table.
                 " join ".$type." 
                 on ".$this->table.".sku=".$type.".sku";
