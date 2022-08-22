@@ -1,5 +1,5 @@
 <?php
-    include_once dirname(__FILE__).'\Products.php';
+    include_once dirname(__FILE__).'/Products.php';
 
     class Furniture extends Products{
         public function __construct($db) {
