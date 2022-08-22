@@ -1,10 +1,10 @@
 <?php
  
 class Database{
-    private $host = "localhost";
-    private $db_name = "scandiweb";
-    private $username = "root";
-    private $password = "";
+    private $host = "remotemysql.com:3306";
+    private $db_name = "6urnbojUNQ";
+    private $username = "6urnbojUNQ";
+    private $password = "uUZ4ZO0vNr";
     private $conn;
 
     public function connect(){
