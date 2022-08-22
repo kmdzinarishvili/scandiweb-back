@@ -7,7 +7,6 @@
         }
 
         public function create_specific_table($sku, $data){
-            echo "INSIDE BOOKS CLASS";
                 $sql = "Insert into books
                     Set sku=:sku,
                       weight=:weight";

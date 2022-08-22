@@ -7,7 +7,6 @@
         }
 
         public function create_specific_table($sku, $data){
-            echo "INSIDE DVD CLASS";
                 $sql = "Insert into dvds
                     Set sku=:sku,
                       size=:size";
