@@ -23,11 +23,18 @@
 
       if ($result->rowCount() > 0) {
         while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+          $row = (object) $row;
           array_push($results, $row);
 
         }
       }
     }
+    
+    function cmp($a, $b) {
+      return strcmp($a->sku, $b->sku);
+      }
+
+      usort($results, "cmp");
       echo json_encode($results);
     }
    
