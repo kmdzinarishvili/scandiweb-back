@@ -1,90 +1,100 @@
 <?php
+
+
     include_once '../../db/Database.php';
+
     define('TYPES', array("dvds", "furniture", "books"));
 
- class Products {
-  protected $conn;
-  private $table = "products";
 
+    class Products
+    {
+        private $conn;
+        private $table = "products";
 
-  
+        public $sku;
+        public $name;
+        public $price;
+        public $type;
 
-  public function __construct($db) {
-    $this->conn = $db;
-  }
-
-  public  function read(){
-      $results=array();
-      foreach (TYPES as &$type){
-        $sql = "SELECT * FROM ".$this->table.
-                " join ".$type." 
-                on ".$this->table.".sku=".$type.".sku";
-        $result = $this->conn->query($sql);
-
-      if ($result->rowCount() > 0) {
-        while($row = $result->fetch(PDO::FETCH_ASSOC)) {
-          $row = (object) $row;
-          array_push($results, $row);
-
+        public function __construct($db)
+        {
+            $this->conn = $db;
         }
-      }
-    }
-    
-    function cmp($a, $b) {
-      return strcmp($a->sku, $b->sku);
-      }
 
-      usort($results, "cmp");
-      echo json_encode($results);
-    }
-   
+        public function read()
+        {
+            $results=array();
+            foreach (TYPES as &$type) {
+                $sql = "SELECT * FROM ".$this->table.
+                        " join ".$type." 
+                on ".$this->table.".sku=".$type.".sku";
+                $result = $this->conn->query($sql);
 
-  public function create($sku,$name,$price,$type, $other ){
-    $sql = "Insert into ".$this->table.
-    " Set sku=:sku,
+                if ($result->rowCount() > 0) {
+                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                        $row = (object) $row;
+                        array_push($results, $row);
+                    }
+                }
+            }
+
+            function cmp($a, $b)
+            {
+                return strcmp($a->sku, $b->sku);
+            }
+
+            usort($results, "cmp");
+            echo json_encode($results);
+        }
+
+
+        public function create($sku, $name, $price, $type, $other)
+        {
+            $sql = "Insert into ".$this->table.
+            " Set sku=:sku,
           name=:name,
           price=:price,
           type=:type";
-    $stmt = $this->conn->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
 
-    $sku=htmlspecialchars(strip_tags($sku));
-    $name=htmlspecialchars(strip_tags($name));
-    $price=htmlspecialchars(strip_tags($price));
-    $type=htmlspecialchars(strip_tags($type));
+            $sku=htmlspecialchars(strip_tags($sku));
+            $name=htmlspecialchars(strip_tags($name));
+            $price=htmlspecialchars(strip_tags($price));
+            $type=htmlspecialchars(strip_tags($type));
 
-    $stmt->bindParam(':sku', $sku);
-    $stmt->bindParam(':name', $name);
-    $stmt->bindParam(':price', $price);
-    $stmt->bindParam(':type', $type);
+            $stmt->bindParam(':sku', $sku);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':price', $price);
+            $stmt->bindParam(':type', $type);
 
-    if ($stmt->execute()&&$this->create_specific_table($sku, $other)){
-      return true;
-    }else{
-      echo $stmt->error;
-      return false;
-    }
+            if ($stmt->execute()&&$this->create_specific_table($sku, $other)) {
+                return true;
+            } else {
+                echo $stmt->error;
+                return false;
+            }
+        }
 
+ public function mass_delete($skus)
+ {
+     try {
+         for ($i=0;$i<count($skus);$i++) {
+             // on delete cascade for dvds, books, and furniture tables
+             $sql = "DELETE FROM ".$this->table." WHERE sku=:sku";
+             //prepare statement
+             $stmt = $this->conn->prepare($sql);
+             //cleaning sku
+             $sku=htmlspecialchars(strip_tags($skus[$i]));
+             $stmt->bindParam(':sku', $sku);
+             $stmt->execute();
+         }
+         return true;
+     } catch(PDOException $e) {
+         echo $e->getMessage();
+         return false;
+     }
  }
-
- public function mass_delete($skus){
-  try {
-    for($i=0;$i<count($skus);$i++){
-      // on delete cascade for dvds, books, and furniture tables
-      $sql = "DELETE FROM ".$this->table." WHERE sku=:sku";
-      //prepare statement
-      $stmt = $this->conn->prepare($sql);
-      //cleaning sku
-      $sku=htmlspecialchars(strip_tags($skus[$i]));
-      $stmt->bindParam(':sku', $sku);
-      $stmt->execute();
-      }
-      return true;
-    } catch(PDOException $e) {
-      echo $e->getMessage();
-      return false;
+        public function create_specific_table($sku, $data)
+        {
+        }
     }
-  }
-  public function create_specific_table($sku, $data){}
-}
- 
-?>
