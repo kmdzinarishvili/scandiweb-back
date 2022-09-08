@@ -2,7 +2,7 @@
 
 include_once dirname(__FILE__).'/Product.php';
 
-class DVDs extends Products
+class DVD extends Product
 {
     public $size;
 
@@ -12,7 +12,7 @@ class DVDs extends Products
         $this->type = "dvd";
     }
 
-    public function create_specific_table($sku, $data)
+    public function createSpecificTable($sku, $data)
     {
         $sql = "Insert into dvds
                     Set sku=:sku,

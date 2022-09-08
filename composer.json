@@ -1,1 +1,8 @@
-{}
+{
+    "autoload": {
+        "psr-4": {
+            "Products\\": "controllers/",
+            "Database": "db/Database.php"
+        }
+    }
+}

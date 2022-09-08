@@ -2,7 +2,7 @@
 
 include_once dirname(__FILE__).'/Product.php';
 
-class Books extends Products
+class Book extends Product
 {
     public $weight;
 
@@ -12,7 +12,7 @@ class Books extends Products
         $this->type="book";
     }
 
-    public function create_specific_table($sku, $data)
+    public function createSpecificTable($sku, $data)
     {
         $sql = "Insert into books
                     Set sku=:sku,

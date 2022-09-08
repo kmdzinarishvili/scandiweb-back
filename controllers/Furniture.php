@@ -2,7 +2,7 @@
 
 include_once dirname(__FILE__).'/Product.php';
 
-class Furniture extends Products
+class Furniture extends Product
 {
     public $height;
     public $width;
@@ -14,7 +14,7 @@ class Furniture extends Products
         $this->type = "furniture";
     }
 
-    public function create_specific_table($sku, $data)
+    public function createSpecificTable($sku, $data)
     {
         $sql = "Insert into furniture
                     Set sku=:sku,

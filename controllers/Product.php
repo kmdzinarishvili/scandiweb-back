@@ -1,12 +1,12 @@
 <?php
 
-include_once dirname(__FILE__).'../db/Database.php';
+include_once dirname(__FILE__).'/../db/Database.php';
 
 define('TYPES', array("dvds", "furniture", "books"));
 
-class Products
+class Product
 {
-    private $conn;
+    protected $conn;
     private $table = "products";
 
     public $sku;
@@ -21,6 +21,7 @@ class Products
 
     public function read()
     {
+        //add prepared statement
         $results=array();
         foreach (TYPES as &$type) {
             $sql = "SELECT * FROM ".$this->table.
@@ -65,7 +66,7 @@ class Products
         $stmt->bindParam(':price', $price);
         $stmt->bindParam(':type', $type);
 
-        if ($stmt->execute()&&$this->create_specific_table($sku, $other)) {
+        if ($stmt->execute()&&$this->createSpecificTable($sku, $other)) {
             return true;
         } else {
             echo $stmt->error;
@@ -73,7 +74,7 @@ class Products
         }
     }
 
- public function mass_delete($skus)
+ public function massDelete($skus)
  {
      try {
          for ($i=0;$i<count($skus);$i++) {
@@ -92,7 +93,7 @@ class Products
          return false;
      }
  }
-    public function create_specific_table($sku, $data)
+    public function createSpecificTable($sku, $data)
     {
     }
 }
