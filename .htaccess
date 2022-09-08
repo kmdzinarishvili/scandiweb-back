@@ -1,0 +1,4 @@
+Options +FollowSymLinks
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !=/scandiweb/scandiweb-back/public/index.php
+RewriteRule .* /scandiweb/scandiweb-back/public/index.php
