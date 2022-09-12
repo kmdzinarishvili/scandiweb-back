@@ -1,8 +1,9 @@
 {
     "autoload": {
         "psr-4": {
-            "Products\\": "controllers/",
-            "Database": "db/Database.php"
+            "Objects\\": "api/objects",
+            "Config\\": "api/config",
+            "Product\\": "api/product"
         }
     }
 }

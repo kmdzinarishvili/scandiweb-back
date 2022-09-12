@@ -1,6 +1,8 @@
 <?php
 
-include_once dirname(__FILE__).'/../db/Database.php';
+// include_once dirname(__FILE__).'/../db/Database.php';
+require 'vendor/autoload.php';
+use Config\Database;
 
 define('TYPES', array("dvds", "furniture", "books"));
 

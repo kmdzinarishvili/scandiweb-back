@@ -3,11 +3,13 @@
     header('Content-Type: application/json');
     header('Access-Control-Allow-Methods: DELETE');
     header('Access-Control-Allow-Headers:Access-Control-Allow-Origin,Content-Type,Access-Control-Allow-Methods, Authorization,X-Requested-With ');
-    include_once dirname(__FILE__).'/../../db/Database.php';
-    include_once dirname(__FILE__).'/../../controllers/DVD.php';
-    include_once dirname(__FILE__).'/../../controllers/Furniture.php';
-    include_once dirname(__FILE__).'/../../controllers/Book.php';
-    include_once dirname(__FILE__).'/../../controllers/Product.php';
+
+    include_once dirname(__FILE__).'/../config/Database.php';
+    include_once dirname(__FILE__).'/../objects/Product.php';
+    include_once dirname(__FILE__).'/../objects/DVD.php';
+    include_once dirname(__FILE__).'/../objects/Furniture.php';
+    include_once dirname(__FILE__).'/../objects/Book.php';
+
     $database= new Database();
     $db = $database->connect();
     $product;
