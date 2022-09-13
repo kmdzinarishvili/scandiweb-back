@@ -1,10 +1,9 @@
 <?php
 
-// include_once dirname(__FILE__).'/../db/Database.php';
 require 'vendor/autoload.php';
 use Config\Database;
 
-define('TYPES', array("dvds", "furniture", "books"));
+define('TYPES', array("dvds"=>["size"], "furniture"=>["height", "width", "length"], "books"=>["weight"]));
 
 class Product
 {
@@ -25,27 +24,44 @@ class Product
     {
         //add prepared statement
         $results=array();
-        foreach (TYPES as &$type) {
-            $sql = "SELECT * FROM ".$this->table.
-                    " join ".$type." 
-                on ".$this->table.".sku=".$type.".sku";
-            $result = $this->conn->query($sql);
 
-            if ($result->rowCount() > 0) {
-                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                    $row = (object) $row;
-                    array_push($results, $row);
+        $sql ="";
+        
+        //add all rows
+        foreach (TYPES as $type => $typeAttribute) {
+            // var_dump($type, $typeAttribute);
+    
+            $sql .="SELECT ".$this->table.".sku, name, price, type, ";
+          
+            foreach (TYPES as $key => $subTypeAttribute) {
+                $additionalCondition="";
+                $comma="";
+                //checks if this attribute is part of current table
+                if ($typeAttribute!=$subTypeAttribute) {
+                    $additionalCondition=" NULL as ";
+                }
+                //adds to select statement. if this attribute is in this table
+                //adds regularly, otherwise selects as null
+                foreach ($subTypeAttribute as $attribute) {
+                    $sql .=$additionalCondition.$attribute.", ";
                 }
             }
+            //removes last comma and adds space
+            $sql = substr($sql, 0, -2)." ";
+        
+            //specifies which tables it is selecting from/joining
+            $sql .="FROM "
+                    .$this->table." right join ".$type." on "
+                    .$this->table.".sku=".$type.".sku UNION ";
         }
-
-        function cmp($a, $b)
-        {
-            return strcmp($a->sku, $b->sku);
-        }
-
-        usort($results, "cmp");
-        echo json_encode($results);
+        //removes last union
+        $sql =trim($sql, "UNION ");
+        //makes pseudo table from previously made sql statement
+        //orders by sku
+        $sql ="SELECT * FROM (". $sql.")prods ORDER BY sku";
+        $result = $this->conn->query($sql);
+        $fetched = $result->fetchAll();
+        return json_encode($fetched);
     }
 
 
