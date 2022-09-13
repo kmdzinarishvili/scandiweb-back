@@ -1,4 +1,15 @@
 <?php
+// require_once 'objects/Product.php';
+// require_once 'objects/DVD.php';
+// require_once 'objects/Furniture.php';
+// require_once 'objects/Book.php';
+// require_once 'config/Database.php';
+// "Objects\\": "api/objects",
+// "Config\\": "api/config",
+// "Product\\": "api/product"
+require_once __DIR__.'/vendor/autoload.php';
+use App\Objects\Product as Product;
+use App\Config\Database as Database;
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode('/', trim($uri, '/'));

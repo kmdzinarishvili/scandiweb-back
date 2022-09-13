@@ -1,9 +1,9 @@
 {
     "autoload": {
         "psr-4": {
-            "Objects\\": "api/objects",
-            "Config\\": "api/config",
-            "Product\\": "api/product"
+            "App\\Objects\\": "api/objects",
+            "App\\Config\\": "api/config",
+            "App\\Product\\": "api/product"
         }
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-require 'vendor/autoload.php';
-use Config\Database;
+namespace App\Objects;
 
 define('TYPES', array("dvds"=>["size"], "furniture"=>["height", "width", "length"], "books"=>["weight"]));
 
@@ -61,7 +60,7 @@ class Product
         $sql ="SELECT * FROM (". $sql.")prods ORDER BY sku";
         $result = $this->conn->query($sql);
         $fetched = $result->fetchAll();
-        return json_encode($fetched);
+        return $fetched;
     }
 
 

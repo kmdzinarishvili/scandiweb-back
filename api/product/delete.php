@@ -4,8 +4,8 @@
     header('Access-Control-Allow-Methods: DELETE');
     header('Access-Control-Allow-Headers:Access-Control-Allow-Origin,Content-Type,Access-Control-Allow-Methods, Authorization,X-Requested-With ');
 
-    include_once dirname(__FILE__).'/../config/Database.php';
-    include_once dirname(__FILE__).'/../objects/Product.php';
+    use App\Objects\Product as Product;
+    use App\Config\Database as Database;
     
     $database= new Database();
     $db = $database->connect();
@@ -16,10 +16,10 @@
     if (isset($data->skus)&&$products->massDelete($data->skus)) {
         $response["status"]= 200;
         $resposne["data"]="";
-        echo $response;
+        echo json_encode($response);
     } else {
         $response["status"]= 400;
         $resposne["data"]="";
         $response["errorMessage"]="Valid SKUs Missing";
-        echo $response;
+        echo json_encode($response);
     }

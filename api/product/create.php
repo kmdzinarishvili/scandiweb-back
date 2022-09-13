@@ -4,11 +4,11 @@
     header('Access-Control-Allow-Methods: DELETE');
     header('Access-Control-Allow-Headers:Access-Control-Allow-Origin,Content-Type,Access-Control-Allow-Methods, Authorization,X-Requested-With ');
 
-    include_once dirname(__FILE__).'/../config/Database.php';
-    include_once dirname(__FILE__).'/../objects/Product.php';
-    include_once dirname(__FILE__).'/../objects/DVD.php';
-    include_once dirname(__FILE__).'/../objects/Furniture.php';
-    include_once dirname(__FILE__).'/../objects/Book.php';
+    use App\Objects\Product as Product;
+    use App\Config\Database as Database;
+    use App\Objects\DVD as DVD;
+    use App\Objects\Furniture as Furniture;
+    use App\Objects\Book as Book;
 
     $database= new Database();
     $db = $database->connect();

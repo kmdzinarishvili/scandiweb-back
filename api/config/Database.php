@@ -1,27 +1,28 @@
 <?php
- 
-class Database{
-    private $host = "remotemysql.com:3306";
-    private $db_name = "6urnbojUNQ";
-    private $username = "6urnbojUNQ";
-    private $password = "uUZ4ZO0vNr";
-    private $conn;
+ namespace App\Config;
 
-    public function connect(){
+ use \PDO as PDO;
 
-        try{
-            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, 
-            $this->username, $this->password );
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+ class Database
+ {
+     private $host = "remotemysql.com:3306";
+     private $db_name = "6urnbojUNQ";
+     private $username = "6urnbojUNQ";
+     private $password = "uUZ4ZO0vNr";
+     private $conn;
 
-        }catch (PDOException $e){
-            echo 'Connection Error: '. $e->getMessage();
-
-        }
-        return $this->conn;
-    }
- 
-}
- 
- 
-?>
+     public function connect()
+     {
+         try {
+             $this->conn = new PDO(
+                 "mysql:host=" . $this->host . ";dbname=" . $this->db_name,
+                 $this->username,
+                 $this->password
+             );
+             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+         } catch (PDOException $e) {
+             echo 'Connection Error: '. $e->getMessage();
+         }
+         return $this->conn;
+     }
+ }

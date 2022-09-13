@@ -1,6 +1,6 @@
 <?php
 
-include_once dirname(__FILE__).'/Product.php';
+namespace App\Objects;
 
 class DVD extends Product
 {
