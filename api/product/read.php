@@ -8,9 +8,8 @@ use App\Config\Database as Database;
 
 $database= new Database();
 $db = $database->connect();
+$result = Product::readAll($db, "products");
 
-$product = new Product($db);
-$result = $product->read();
 if (!empty($result)) {
     $response["status"]= 200;
     $response["data"]=$result;

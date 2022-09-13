@@ -4,12 +4,13 @@ namespace App\Objects;
 
 class Book extends Product
 {
-    public $weight;
+    private $weight;
 
-    public function __construct($db)
+    public function __construct($db, $attributes)
     {
-        parent::__construct($db);
+        parent::__construct($db, $attributes);
         $this->type="book";
+        $this->weight = $attributes['weight'];
     }
 
     public function createSpecificTable($sku, $data)

@@ -4,14 +4,17 @@ namespace App\Objects;
 
 class Furniture extends Product
 {
-    public $height;
-    public $width;
-    public $length;
+    private $height;
+    private $width;
+    private $length;
 
-    public function __construct($db)
+    public function __construct($db, $attributes)
     {
-        parent::__construct($db);
+        parent::__construct($db, $attributes);
         $this->type = "furniture";
+        $this->height=$attributes['height'];
+        $this->width=$attributes['width'];
+        $this->length=$attributes['length'];
     }
 
     public function createSpecificTable($sku, $data)

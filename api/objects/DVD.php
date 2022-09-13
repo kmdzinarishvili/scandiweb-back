@@ -4,12 +4,13 @@ namespace App\Objects;
 
 class DVD extends Product
 {
-    public $size;
+    private $size;
 
-    public function __construct($db)
+    public function __construct($db, $attributes)
     {
-        parent::__construct($db);
+        parent::__construct($db, $attributes);
         $this->type = "dvd";
+        $this->size=$attributes['size'];
     }
 
     public function createSpecificTable($sku, $data)

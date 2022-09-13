@@ -2,25 +2,34 @@
 
 namespace App\Objects;
 
+use App\Objects\DVD as DVD;
+
+use \PDO;
+
 define('TYPES', array("dvds"=>["size"], "furniture"=>["height", "width", "length"], "books"=>["weight"]));
 
-class Product
+abstract class Product
 {
+    protected static $table = "products";
     protected $conn;
-    private $table = "products";
 
-    public $sku;
-    public $name;
-    public $price;
-    public $type;
+    protected $sku;
+    protected $name;
+    protected $price;
+    protected $type;
 
-    public function __construct($db)
+    public function __construct($db, $attributes)
     {
         $this->conn = $db;
+        $this->sku=$attributes['sku'];
+        $this->name=$attributes['name'];
+        $this->price=$attributes['price'];
+        $this->type=$attributes['type'];
     }
 
-    public function read()
+    public static function readAll($db)
     {
+        $conn = $db;
         //add prepared statement
         $results=array();
 
@@ -30,7 +39,7 @@ class Product
         foreach (TYPES as $type => $typeAttribute) {
             // var_dump($type, $typeAttribute);
     
-            $sql .="SELECT ".$this->table.".sku, name, price, type, ";
+            $sql .="SELECT ".Product::$table.".sku, name, price, type, ";
           
             foreach (TYPES as $key => $subTypeAttribute) {
                 $additionalCondition="";
@@ -50,17 +59,23 @@ class Product
         
             //specifies which tables it is selecting from/joining
             $sql .="FROM "
-                    .$this->table." right join ".$type." on "
-                    .$this->table.".sku=".$type.".sku UNION ";
+                    .Product::$table." right join ".$type." on "
+                    .Product::$table.".sku=".$type.".sku UNION ";
         }
         //removes last union
         $sql =trim($sql, "UNION ");
         //makes pseudo table from previously made sql statement
         //orders by sku
         $sql ="SELECT * FROM (". $sql.")prods ORDER BY sku";
-        $result = $this->conn->query($sql);
-        $fetched = $result->fetchAll();
-        return $fetched;
+        $result = $conn->query($sql);
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            $type ="App\\Objects\\".$row['type'];
+            $object = new $type($db, $row);
+            array_push($results, $object);
+        }
+        var_dump($results);
+
+        return $results;
     }
 
 
