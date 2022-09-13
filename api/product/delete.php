@@ -11,11 +11,15 @@
     $db = $database->connect();
     $products = new Product($db);
     $data = json_decode(file_get_contents("php://input"));
-    var_dump($data);
-    // if (isset($data->skus)) {
-    //     if ($products->massDelete($data->skus)) {
-    //         echo "Records Deleted Succesfully";
-    //     };
-    // } else {
-    //     echo "Valid SKUs Missing";
-    // }
+    //body should be an array of the skus
+    $response=[];
+    if (isset($data->skus)&&$products->massDelete($data->skus)) {
+        $response["status"]= 200;
+        $resposne["data"]="";
+        echo $response;
+    } else {
+        $response["status"]= 400;
+        $resposne["data"]="";
+        $response["errorMessage"]="Valid SKUs Missing";
+        echo $response;
+    }
