@@ -2,3 +2,4 @@ Options +FollowSymLinks
 RewriteEngine on
 RewriteCond %{REQUEST_URI} !=/index.php
 RewriteRule .* /index.php
+Header set Access-Control-Allow-Origin "*"
