@@ -77,7 +77,7 @@
             $response=[];
         
             if (Product::validateInput($data)) {
-                $className ="App\\Objects\\".$data['type'];
+                $className ="App\\Models\\".$data['type'];
                 $product = new $className($db, $data);
                 $created = $product->create();
                 $response["status"]= 200;

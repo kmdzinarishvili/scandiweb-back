@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modles;
+namespace App\Models;
 
 class DVD extends Product
 {
