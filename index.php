@@ -4,8 +4,6 @@ use App\Controllers\ProductController as ProductController;
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode('/', trim($uri, '/'));
-//for local
-// $uri=array_slice($uri, 2);
 
 $uriFound=false;
 if (!empty($uri)&&$uri[0]==='products') {
