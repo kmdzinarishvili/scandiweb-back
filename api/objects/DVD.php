@@ -13,18 +13,20 @@ class DVD extends Product
         $this->size=$attributes['size'];
     }
 
-    public function createSpecificTable($sku, $data)
+    public function create()
     {
+        $productSuccess = parent::create($this);
+        if (!$productSuccess) {
+            return false;
+        }
         $sql = "Insert into dvds
                     Set sku=:sku,
                       size=:size";
         $stmt = $this->conn->prepare($sql);
-
-        $sku=htmlspecialchars(strip_tags($sku));
-        $name=htmlspecialchars(strip_tags($data->size));
-
+        $sku=htmlspecialchars(strip_tags($this->sku));
+        $size=htmlspecialchars(strip_tags($this->size));
         $stmt->bindParam(':sku', $sku);
-        $stmt->bindParam(':size', $data->size);
+        $stmt->bindParam(':size', $size);
 
         if ($stmt->execute()) {
             return true;
