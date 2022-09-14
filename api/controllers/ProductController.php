@@ -33,22 +33,23 @@
             header('Access-Control-Allow-Origin: *');
             header('Content-Type: application/json');
             header('Access-Control-Allow-Methods: DELETE');
-            header('Access-Control-Allow-Headers:Access-Control-Allow-Origin,Content-Type,Access-Control-Allow-Methods, Authorization,X-Requested-With ');
+            header('Access-Control-Allow-Headers:Access-Control-Allow-Origin,Content-Type,Access-Control-Allow-Methods');
             $database= new Database();
             $db = $database->connect();
             $data = json_decode(file_get_contents('php://input'));
             //body should be an array of the skus
             $response=[];
-            if (isset($data->skus)&&is_array($data->skus)) {
-                $del = Product::massDelete($db, $data->skus);
-                if ($del) {
-                    header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
-                } else {
-                    header($_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error');
-                }
-            } else {
-                header($_SERVER['SERVER_PROTOCOL'].' 400 Bad Request');
-            }
+            echo "in mass delete";
+            // if (isset($data->skus)&&is_array($data->skus)) {
+            //     $del = Product::massDelete($db, $data->skus);
+            //     if ($del) {
+            //         header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
+            //     } else {
+            //         header($_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error');
+            //     }
+            // } else {
+            //     header($_SERVER['SERVER_PROTOCOL'].' 400 Bad Request');
+            // }
         }
 
         //capitalization
