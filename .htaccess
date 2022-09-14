@@ -1,4 +1,4 @@
 Options +FollowSymLinks
 RewriteEngine on
-RewriteCond %{REQUEST_URI} !=/scandiweb/scandiweb-back/index.php
-RewriteRule .* /scandiweb/scandiweb-back/index.php
+RewriteCond %{REQUEST_URI} !=/index.php
+RewriteRule .* /index.php
