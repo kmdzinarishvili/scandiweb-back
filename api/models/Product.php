@@ -28,29 +28,26 @@ abstract class Product
         $this->type=$attributes['type'];
     }
 
-    public static function readAll($db)
+    public static function readAll($conn)
     {
-        $conn=$db;
         $results=array();
         foreach (self::TYPES as $type=>$typeAttribute) {
             $sql = 'SELECT * FROM '.self::$table.
-                    ' join '.$type.' 
-                  on '.self::$table.'.sku='.$type.'.sku';
-            $result = $conn->query($sql);
-  
-            if ($result->rowCount() > 0) {
-                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                    ' join '.$type.' on '
+                    .self::$table.'.sku='.$type.'.sku';
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $row = (object) $row;
                     array_push($results, $row);
                 }
             }
         }
-      
         function cmp($a, $b)
         {
             return strcmp($a->sku, $b->sku);
         }
-  
         usort($results, function ($a, $b) {
             return strcmp($a->sku, $b->sku);
         });
@@ -77,11 +74,12 @@ abstract class Product
 
     public function create()
     {
-        $sql = 'Insert into '.self::$table.
-        ' Set sku=:sku,
-          name=:name,
-          price=:price,
-          type=:type';
+        $sql = 'Insert into '
+                .self::$table.
+                ' Set sku=:sku,
+                name=:name,
+                price=:price,
+                type=:type';
         $stmt = $this->conn->prepare($sql);
 
         $sku=htmlspecialchars(strip_tags($this->sku));
