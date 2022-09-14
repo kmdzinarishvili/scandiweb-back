@@ -31,9 +31,5 @@ if (!empty($uri)&&$uri[0]==='products') {
     }
 }
 if (!$uriFound) {
-    $response =[];
-    $response['status']= 404;
-    $response['data']='';
-    $response['errorMessage']='URI Not Found.';
-    echo $response;
+    header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
 }
