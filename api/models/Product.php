@@ -62,7 +62,8 @@ abstract class Product
                 return false;
             }
         }
-        foreach (self::TYPES[$data['type']]??self::TYPES[$data['type'].'s'] as $attribute) {
+        $type = strtolower($data['type']);
+        foreach (self::TYPES[$type]??self::TYPES[$type.'s'] as $attribute) {
             if (!array_key_exists($attribute, $data)) {
                 return false;
             }
