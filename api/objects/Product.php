@@ -2,16 +2,17 @@
 
 namespace App\Objects;
 
-use App\Objects\DVD as DVD;
+use App\Config\Database as Database;
 
 use \PDO;
-
-define('TYPES', array("dvds"=>["size"], "furniture"=>["height", "width", "length"], "books"=>["weight"]));
 
 abstract class Product
 {
     protected static $table = "products";
     protected $conn;
+
+    const TYPES=array("dvds"=>["size"], "furniture"=>["height", "width", "length"], "books"=>["weight"]);
+    const ATTRIBUTES=array('sku','name','price','type');
 
     protected $sku;
     protected $name;
@@ -29,76 +30,71 @@ abstract class Product
 
     public static function readAll($db)
     {
-        $conn = $db;
-        //add prepared statement
+        $conn=$db;
         $results=array();
-
-        $sql ="";
-        
-        //add all rows
-        foreach (TYPES as $type => $typeAttribute) {
-            // var_dump($type, $typeAttribute);
-    
-            $sql .="SELECT ".Product::$table.".sku, name, price, type, ";
-          
-            foreach (TYPES as $key => $subTypeAttribute) {
-                $additionalCondition="";
-                $comma="";
-                //checks if this attribute is part of current table
-                if ($typeAttribute!=$subTypeAttribute) {
-                    $additionalCondition=" NULL as ";
-                }
-                //adds to select statement. if this attribute is in this table
-                //adds regularly, otherwise selects as null
-                foreach ($subTypeAttribute as $attribute) {
-                    $sql .=$additionalCondition.$attribute.", ";
+        foreach (self::TYPES as $type=>$typeAttribute) {
+            $sql = "SELECT * FROM ".self::$table.
+                    " join ".$type." 
+                  on ".self::$table.".sku=".$type.".sku";
+            $result = $conn->query($sql);
+  
+            if ($result->rowCount() > 0) {
+                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                    $row = (object) $row;
+                    array_push($results, $row);
                 }
             }
-            //removes last comma and adds space
-            $sql = substr($sql, 0, -2)." ";
-        
-            //specifies which tables it is selecting from/joining
-            $sql .="FROM "
-                    .Product::$table." right join ".$type." on "
-                    .Product::$table.".sku=".$type.".sku UNION ";
         }
-        //removes last union
-        $sql =trim($sql, "UNION ");
-        //makes pseudo table from previously made sql statement
-        //orders by sku
-        $sql ="SELECT * FROM (". $sql.")prods ORDER BY sku";
-        $result = $conn->query($sql);
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $type ="App\\Objects\\".$row['type'];
-            $object = new $type($db, $row);
-            array_push($results, $object);
+      
+        function cmp($a, $b)
+        {
+            return strcmp($a->sku, $b->sku);
         }
-        var_dump($results);
+  
+        usort($results, function ($a, $b) {
+            return strcmp($a->sku, $b->sku);
+        });
+        return ($results);
+    }
+   
 
-        return $results;
+    public static function validateInput($data)
+    {
+        foreach (self::ATTRIBUTES as $attribute) {
+            if (!array_key_exists($attribute, $data)) {
+                return false;
+            }
+        }
+        foreach (self::TYPES[$data['type']]??self::TYPES[$data['type']."s"] as $attribute) {
+            if (!array_key_exists($attribute, $data)) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 
 
-    public function create($sku, $name, $price, $type, $other)
+    public function create()
     {
-        $sql = "Insert into ".$this->table.
+        $sql = "Insert into ".self::$table.
         " Set sku=:sku,
           name=:name,
           price=:price,
           type=:type";
         $stmt = $this->conn->prepare($sql);
 
-        $sku=htmlspecialchars(strip_tags($sku));
-        $name=htmlspecialchars(strip_tags($name));
-        $price=htmlspecialchars(strip_tags($price));
-        $type=htmlspecialchars(strip_tags($type));
+        $sku=htmlspecialchars(strip_tags($this->sku));
+        $name=htmlspecialchars(strip_tags($this->name));
+        $price=htmlspecialchars(strip_tags($this->price));
+        $type=htmlspecialchars(strip_tags($this->type));
 
         $stmt->bindParam(':sku', $sku);
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':price', $price);
         $stmt->bindParam(':type', $type);
 
-        if ($stmt->execute()&&$this->createSpecificTable($sku, $other)) {
+        if ($stmt->execute()) {
             return true;
         } else {
             echo $stmt->error;
@@ -106,26 +102,25 @@ abstract class Product
         }
     }
 
- public function massDelete($skus)
- {
-     try {
-         for ($i=0;$i<count($skus);$i++) {
-             // on delete cascade for dvds, books, and furniture tables
-             $sql = "DELETE FROM ".$this->table." WHERE sku=:sku";
-             //prepare statement
-             $stmt = $this->conn->prepare($sql);
-             //cleaning sku
-             $sku=htmlspecialchars(strip_tags($skus[$i]));
-             $stmt->bindParam(':sku', $sku);
-             $stmt->execute();
-         }
-         return true;
-     } catch(PDOException $e) {
-         echo $e->getMessage();
-         return false;
-     }
- }
-    public function createSpecificTable($sku, $data)
+    public static function massDelete($db, $skus)
     {
+        try {
+            for ($i=0;$i<count($skus);$i++) {
+                // on delete cascade for dvds, books, and furniture tables
+                $sql = "DELETE FROM ".self::$table." WHERE sku=:sku";
+                //prepare statement
+                $stmt = $db->prepare($sql);
+                //cleaning sku
+                $sku=htmlspecialchars(strip_tags($skus[$i]));
+                $stmt->bindParam(':sku', $sku);
+                if (!$stmt->execute()) {
+                    return false;
+                }
+            }
+            return true;
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
 }
