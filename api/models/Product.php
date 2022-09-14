@@ -8,10 +8,10 @@ use \PDO;
 
 abstract class Product
 {
-    protected static $table = "products";
+    protected static $table = 'products';
     protected $conn;
 
-    const TYPES=array("dvds"=>["size"], "furniture"=>["height", "width", "length"], "books"=>["weight"]);
+    const TYPES=array('dvds'=>['size'], 'furniture'=>['height', 'width', 'length'], 'books'=>['weight']);
     const ATTRIBUTES=array('sku','name','price','type');
 
     protected $sku;
@@ -33,9 +33,9 @@ abstract class Product
         $conn=$db;
         $results=array();
         foreach (self::TYPES as $type=>$typeAttribute) {
-            $sql = "SELECT * FROM ".self::$table.
-                    " join ".$type." 
-                  on ".self::$table.".sku=".$type.".sku";
+            $sql = 'SELECT * FROM '.self::$table.
+                    ' join '.$type.' 
+                  on '.self::$table.'.sku='.$type.'.sku';
             $result = $conn->query($sql);
   
             if ($result->rowCount() > 0) {
@@ -65,7 +65,7 @@ abstract class Product
                 return false;
             }
         }
-        foreach (self::TYPES[$data['type']]??self::TYPES[$data['type']."s"] as $attribute) {
+        foreach (self::TYPES[$data['type']]??self::TYPES[$data['type'].'s'] as $attribute) {
             if (!array_key_exists($attribute, $data)) {
                 return false;
             }
@@ -77,11 +77,11 @@ abstract class Product
 
     public function create()
     {
-        $sql = "Insert into ".self::$table.
-        " Set sku=:sku,
+        $sql = 'Insert into '.self::$table.
+        ' Set sku=:sku,
           name=:name,
           price=:price,
-          type=:type";
+          type=:type';
         $stmt = $this->conn->prepare($sql);
 
         $sku=htmlspecialchars(strip_tags($this->sku));
@@ -107,7 +107,7 @@ abstract class Product
         try {
             for ($i=0;$i<count($skus);$i++) {
                 // on delete cascade for dvds, books, and furniture tables
-                $sql = "DELETE FROM ".self::$table." WHERE sku=:sku";
+                $sql = 'DELETE FROM '.self::$table.' WHERE sku=:sku';
                 //prepare statement
                 $stmt = $db->prepare($sql);
                 //cleaning sku

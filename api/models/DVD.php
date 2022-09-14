@@ -9,7 +9,7 @@ class DVD extends Product
     public function __construct($db, $attributes)
     {
         parent::__construct($db, $attributes);
-        $this->type = "dvd";
+        $this->type = 'dvd';
         $this->size=$attributes['size'];
     }
 
@@ -19,9 +19,9 @@ class DVD extends Product
         if (!$productSuccess) {
             return false;
         }
-        $sql = "Insert into dvds
+        $sql = 'Insert into dvds
                     Set sku=:sku,
-                      size=:size";
+                      size=:size';
         $stmt = $this->conn->prepare($sql);
         $sku=htmlspecialchars(strip_tags($this->sku));
         $size=htmlspecialchars(strip_tags($this->size));

@@ -11,7 +11,7 @@ class Furniture extends Product
     public function __construct($db, $attributes)
     {
         parent::__construct($db, $attributes);
-        $this->type = "furniture";
+        $this->type = 'furniture';
         $this->height=$attributes['height'];
         $this->width=$attributes['width'];
         $this->length=$attributes['length'];
@@ -23,11 +23,11 @@ class Furniture extends Product
         if (!$productSuccess) {
             return false;
         }
-        $sql = "Insert into furniture
+        $sql = 'Insert into furniture
                     Set sku=:sku,
                       height=:height,
                       width=:width,
-                      length=:length";
+                      length=:length';
         $stmt = $this->conn->prepare($sql);
 
         $sku=htmlspecialchars(strip_tags($this->sku));

@@ -9,7 +9,7 @@ class Book extends Product
     public function __construct($db, $attributes)
     {
         parent::__construct($db, $attributes);
-        $this->type="book";
+        $this->type='book';
         $this->weight = $attributes['weight'];
     }
 
@@ -19,9 +19,9 @@ class Book extends Product
         if (!$productSuccess) {
             return false;
         }
-        $sql = "Insert into books
+        $sql = 'Insert into books
                     Set sku=:sku,
-                      weight=:weight";
+                      weight=:weight';
         $stmt = $this->conn->prepare($sql);
 
         $sku=htmlspecialchars(strip_tags($this->sku));

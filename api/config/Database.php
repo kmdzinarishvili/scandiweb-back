@@ -5,17 +5,16 @@
 
  class Database
  {
-     private $host = "remotemysql.com:3306";
-     private $db_name = "6urnbojUNQ";
-     private $username = "6urnbojUNQ";
-     private $password = "uUZ4ZO0vNr";
+     private $host = 'remotemysql.com:3306';
+     private $username = '6urnbojUNQ';
+     private $password = 'uUZ4ZO0vNr';
      private $conn;
 
      public function connect()
      {
          try {
              $this->conn = new PDO(
-                 "mysql:host=" . $this->host . ";dbname=" . $this->db_name,
+                 'mysql:host=' . $this->host . ';dbname=' . $this->db_name,
                  $this->username,
                  $this->password
              );
