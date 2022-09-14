@@ -10,13 +10,14 @@
     use App\Objects\Furniture as Furniture;
     use App\Objects\Book as Book;
 
-    // $database= new Database();
-    // $db = $database->connect();
-    $product;
-    $data = json_decode(file_get_contents("php://input"));
+    $database= new Database();
+    $db = $database->connect();
+    $data = json_decode(file_get_contents("php://input"), true);
+    $response=[];
+
     if (Product::validateInput($data)) {
         $className ="App\\Objects\\".$data['type'];
-        $product = new $className($data);
+        $product = new $className($db, $data);
         $created = $product->create();
         $response["status"]= 200;
         $response["data"]="";

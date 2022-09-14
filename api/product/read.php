@@ -7,7 +7,9 @@
 
     $database= new Database();
     $db = $database->connect();
-    $results = Product::readAll($db, "products");
+    $results = Product::readAll($db);
+    $response=[];
+
     if (!empty($results)) {
         $response["status"]= 200;
         $response["data"]=$results;

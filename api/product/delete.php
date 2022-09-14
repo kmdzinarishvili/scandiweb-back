@@ -9,14 +9,19 @@
     
     $database= new Database();
     $db = $database->connect();
-    $products = new Product($db);
     $data = json_decode(file_get_contents("php://input"));
-    //body should be an array of the skus
     $response=[];
-    if (isset($data->skus)&&$products->massDelete($data->skus)) {
-        $response["status"]= 200;
-        $resposne["data"]="";
-        echo json_encode($response);
+    if (isset($data->skus)&&is_array($data->skus)) {
+        $del = Product::massDelete($db, $data->skus);
+        if ($del) {
+            $response["status"]= 200;
+            $resposne["data"]="";
+            echo json_encode($response);
+        } else {
+            $response["status"]= 500;
+            $resposne["data"]="";
+            $response["errorMessage"]="Valid SKUs Missing";
+        }
     } else {
         $response["status"]= 400;
         $resposne["data"]="";
