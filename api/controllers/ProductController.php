@@ -27,7 +27,7 @@
             } else {
                 $response['status']= 404;
                 $resposne['data']='';
-                $response['errorMessage']='Request successful but no data found';
+                $response['errorMessage']='Request executed but no data found.';
                 echo json_encode($response);
             }
         }
@@ -86,7 +86,7 @@
             } else {
                 $response['status']= 400;
                 $resposne['data']='';
-                $response['errorMessage']='Invalid input';
+                $response['errorMessage']='Invalid input.';
                 echo json_encode($response);
             }
         }
