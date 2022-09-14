@@ -31,9 +31,12 @@
         public function massDelete()
         {
             header('Access-Control-Allow-Origin: *');
+            header('Access-Control-Allow-Headers:  
+            Content-Type, X-Auth-Token, Authorization, Origin
+            Access-Control-Allow-Origin,Access-Control-Allow-Methods');
             header('Content-Type: application/json');
             header('Access-Control-Allow-Methods: DELETE');
-            header('Access-Control-Allow-Headers:Access-Control-Allow-Origin,Content-Type,Access-Control-Allow-Methods');
+            // header('Access-Control-Allow-Headers:Access-Control-Allow-Origin,Content-Type,Access-Control-Allow-Methods');
             $database= new Database();
             $db = $database->connect();
             $data = json_decode(file_get_contents('php://input'));
