@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__.'/vendor/autoload.php';
-use App\Objects\Product as Product;
-use App\Config\Database as Database;
+use App\Controllers\ProductController as ProductController;
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode('/', trim($uri, '/'));
@@ -13,21 +12,21 @@ if (!empty($uri)&&$uri[0]==="products") {
     switch($_SERVER['REQUEST_METHOD']) {
         case 'GET':
             if (count($uri)===1) {
-                include_once  dirname(__FILE__).'/api/product/read.php';
+                (new ProductController())->readAll();
                 $uriFound=true;
                 break;
             }
             break;
         case 'POST':
             if (count($uri)===2 && $uri[1]==="create") {
-                include_once  dirname(__FILE__).'/api/product/create.php';
+                (new ProductController())->create();
                 $uriFound=true;
                 break;
             }
             break;
         case 'DELETE':
             if (count($uri)===2 && $uri[1]==="massDelete") {
-                include_once  dirname(__FILE__).'/api/product/delete.php';
+                (new ProductController())->massDelete();
                 $uriFound=true;
                 break;
             }
