@@ -12,9 +12,6 @@
     {
         public function readAll()
         {
-            header('Access-Control-Allow-Origin: *');
-            header('Content-Type: application/json');
-    
             $database= new Database();
             $db = $database->connect();
             $results = Product::readAll($db);
@@ -30,39 +27,25 @@
 
         public function massDelete()
         {
-            header('Access-Control-Allow-Origin: *');
-            header('Access-Control-Allow-Headers:  
-            Content-Type, X-Auth-Token, Authorization, Origin
-            Access-Control-Allow-Origin,Access-Control-Allow-Methods');
-            header('Content-Type: application/json');
-            header('Access-Control-Allow-Methods: DELETE');
-            // header('Access-Control-Allow-Headers:Access-Control-Allow-Origin,Content-Type,Access-Control-Allow-Methods');
             $database= new Database();
             $db = $database->connect();
             $data = json_decode(file_get_contents('php://input'));
             //body should be an array of the skus
-            $response=[];
-            echo "in mass delete";
-            // if (isset($data->skus)&&is_array($data->skus)) {
-            //     $del = Product::massDelete($db, $data->skus);
-            //     if ($del) {
-            //         header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
-            //     } else {
-            //         header($_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error');
-            //     }
-            // } else {
-            //     header($_SERVER['SERVER_PROTOCOL'].' 400 Bad Request');
-            // }
+            if (isset($data->skus)&&is_array($data->skus)) {
+                $del = Product::massDelete($db, $data->skus);
+                if ($del) {
+                    header($_SERVER['SERVER_PROTOCOL'].' 201 OK');
+                } else {
+                    header($_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error');
+                }
+            } else {
+                header($_SERVER['SERVER_PROTOCOL'].' 400 Bad Request');
+            }
         }
 
         //capitalization
         public function create()
         {
-            header('Access-Control-Allow-Origin: *');
-            header('Content-Type: application/json');
-            header('Access-Control-Allow-Methods: DELETE');
-            header('Access-Control-Allow-Headers:Access-Control-Allow-Origin,Content-Type,Access-Control-Allow-Methods, Authorization,X-Requested-With ');
-        
             $database= new Database();
             $db = $database->connect();
             $data = json_decode(file_get_contents('php://input'), true);
