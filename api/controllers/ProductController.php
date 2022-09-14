@@ -26,7 +26,7 @@
                 echo json_encode($response);
             } else {
                 $response['status']= 404;
-                $resposne['data']='';
+                $response['data']='';
                 $response['errorMessage']='Request executed but no data found.';
                 echo json_encode($response);
             }
@@ -52,18 +52,18 @@
                     echo json_encode($response);
                 } else {
                     $response['status']= 500;
-                    $resposne['data']='';
+                    $response['data']='';
                     $response['errorMessage']='Undetermined Error.';
                 }
             } else {
                 $response['status']= 400;
-                $resposne['data']='';
+                $response['data']='';
                 $response['errorMessage']='Valid SKUs Missing.';
                 echo json_encode($response);
             }
         }
 
-
+        //capitalization
         public function create()
         {
             header('Access-Control-Allow-Origin: *');
@@ -77,15 +77,16 @@
             $response=[];
         
             if (Product::validateInput($data)) {
-                $className ='App\\Models\\'.$data['type'];
-                $product = new $className($db, $data);
+                $className = ucfirst(strtolower($data['type']));
+                $fullClassName ='App\\Models\\'.$className;
+                $product = new $fullClassName($db, $data);
                 $created = $product->create();
                 $response['status']= 200;
                 $response['data']='';
                 echo json_encode($response);
             } else {
                 $response['status']= 400;
-                $resposne['data']='';
+                $response['data']='';
                 $response['errorMessage']='Invalid input.';
                 echo json_encode($response);
             }
