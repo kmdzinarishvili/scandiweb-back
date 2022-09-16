@@ -4,7 +4,7 @@
     use App\Config\Database as Database;
     use App\Models\Product as Product;
 
-    use App\Models\DVD as DVD;
+    use App\Models\Dvd as Dvd;
     use App\Models\Furniture as Furniture;
     use App\Models\Book as Book;
 
@@ -53,9 +53,14 @@
             if (Product::validateInput($data)) {
                 $className = ucfirst(strtolower($data['type']));
                 $fullClassName ='App\\Models\\'.$className;
+
                 $product = new $fullClassName($db, $data);
                 $created = $product->create();
-                header($_SERVER['SERVER_PROTOCOL'].' 201 Created');
+                if ($created) {
+                    header($_SERVER['SERVER_PROTOCOL'].' 201 Created');
+                } else {
+                    header($_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error');
+                }
             } else {
                 header($_SERVER['SERVER_PROTOCOL'].' 400 Bad Request');
             }
