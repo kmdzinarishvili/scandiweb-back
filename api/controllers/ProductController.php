@@ -53,6 +53,9 @@
             if (Product::validateInput($data)) {
                 $className = ucfirst(strtolower($data['type']));
                 $fullClassName ='App\\Models\\'.$className;
+                var_dump("className", $className);
+                var_dump("fullClassName", $fullClassName);
+                var_dump("data", $data);
 
                 $product = new $fullClassName($db, $data);
                 $created = $product->create();
