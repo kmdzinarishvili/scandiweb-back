@@ -6,4 +6,4 @@ The frontend is deployed here:
 https://juniortest-ketevan-mdzinarishvili.netlify.app/
 
 The api is hosted here:
-https://juniortestketimdzinarishvili.herokuapp.com/api/products/read.php
+https://juniortestketimdzinarishvili.herokuapp.com/products/
